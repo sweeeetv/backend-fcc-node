@@ -3,12 +3,12 @@ let express = require("express");
 let app = express();
 console.log("Hello World");
 
-//this line if not for human, but for HTML to find the css file
 app.use("/", (req, res, next) => {
   console.log(req.method + " " + req.path + " - " + req.ip);
   next();
 });
 
+//this line if not for human, but for HTML to find the css file
 app.use("/public", express.static(__dirname + "/public"));
 
 app.get("/", (req, res) => {
@@ -23,5 +23,14 @@ app.get("/json", (req, res) => {
   }
   res.json({ message: message });
 });
-
+app.get(
+  "/now",
+  (req, res, next) => {
+    req.time = new Date().toString();
+    next();
+  },
+  (req, res) => {
+    res.json({ time: req.time });
+  },
+);
 module.exports = app;
